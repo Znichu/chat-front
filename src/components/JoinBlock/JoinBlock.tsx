@@ -2,7 +2,7 @@ import React, {ChangeEvent, useState} from "react";
 import style from "./JoinBlock.module.scss"
 import {Button, Input} from "antd";
 import {useDispatch, useSelector} from "react-redux";
-import {requestIsAuth} from "../../store/chat-reducer";
+import {requestJoin} from "../../store/chat-reducer";
 import {RootState} from "../../store/store";
 
 
@@ -24,7 +24,7 @@ export const JoinBlock: React.FC = () => {
     }
 
     const loginChat = () => {
-        dispatch(requestIsAuth(roomId, userName))
+        dispatch(requestJoin(roomId, userName))
     }
 
         return (

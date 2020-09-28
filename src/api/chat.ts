@@ -5,8 +5,8 @@ const instance = axios.create({
     //baseURL: "https://real-time-chat-back.herokuapp.com/"
 });
 
-export const loginAPI = {
-    login(roomId: string, userName: string) {
+export const joinAPI = {
+    join(roomId: string, userName: string) {
         return instance.post(`/rooms`, {roomId, userName})
             .then(res => res.data)
     }
