@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const instance = axios.create({
     baseURL: "http://localhost:7542"
-    //baseURL: "https://real-time-chat-back.herokuapp.com/"
+    //baseURL: "https://real-time-chat-back.herokuapp.com"
 });
 
 export const joinAPI = {

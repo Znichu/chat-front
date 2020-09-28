@@ -1,6 +1,7 @@
 import { ThunkAction } from "redux-thunk";
 import {InferActionTypes, RootState} from "./store";
-import {joinAPI} from "../api/chat";
+import {joinAPI} from "../api/join";
+import {socketAPI} from "../api/socket";
 
 let initialState = {
     joined: false,
@@ -37,7 +38,8 @@ export const requestJoin = (roomId: string, userName: string): ThunkType => asyn
     try {
         dispatch(actions.toggleIsFetching(true));
         await joinAPI.join(roomId, userName);
-        dispatch(actions.setJoin(true))
+        dispatch(actions.setJoin(true));
+        socketAPI.roomJoin(roomId, userName);
     } catch (e) {
         console.log(e)
     }
