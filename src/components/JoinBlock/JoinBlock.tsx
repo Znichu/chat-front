@@ -1,8 +1,9 @@
 import React, {ChangeEvent, useState} from "react";
 import style from "./JoinBlock.module.scss"
 import {Button, Input} from "antd";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {requestIsAuth} from "../../store/chat-reducer";
+import {RootState} from "../../store/store";
 
 
 export const JoinBlock: React.FC = () => {
@@ -11,6 +12,8 @@ export const JoinBlock: React.FC = () => {
 
     const [roomId, setRoomId] = useState('');
     const [userName, setUserName] = useState('');
+
+    const isFetching = useSelector((state: RootState) => state.chat.isFetching);
 
     const onChangeRoomId = (e: ChangeEvent<HTMLInputElement>) => {
         setRoomId(e.currentTarget.value)
@@ -33,7 +36,7 @@ export const JoinBlock: React.FC = () => {
                 <div className={style.join}>
                     <Input onChange={onChangeRoomId} value={roomId} placeholder="Enter ID room"/>
                     <Input onChange={onChangeUserName} value={userName} placeholder="Enter your username"/>
-                    <Button onClick={loginChat} type="primary">SEND</Button>
+                    <Button loading={isFetching} onClick={loginChat} type="primary">SEND</Button>
                 </div>
 
             </div>

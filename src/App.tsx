@@ -2,7 +2,7 @@ import React from 'react';
 import io from 'socket.io-client';
 import {JoinBlock} from "./components/JoinBlock/JoinBlock";
 
-const socket = io('http://localhost:8080');
+const socket = io('http://localhost:7542');
 
 function App() {
     return (

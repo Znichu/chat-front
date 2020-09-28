@@ -3,7 +3,8 @@ import {InferActionTypes, RootState} from "./store";
 import {loginAPI} from "../api/chat";
 
 let initialState = {
-    isAuth: false
+    isAuth: false,
+    isFetching: false
 }
 
 export const ChatReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
@@ -14,6 +15,12 @@ export const ChatReducer = (state = initialState, action: ActionsTypes): Initial
                 isAuth: action.auth
             }
         }
+        case "TOGGLE_IS_FETCHING": {
+            return {
+                ...state,
+                isFetching: action.isFetching
+            }
+        }
         default:
             return state;
     }
@@ -21,18 +28,20 @@ export const ChatReducer = (state = initialState, action: ActionsTypes): Initial
 
 //Actions
 const actions = {
+    toggleIsFetching: (isFetching: boolean) => ({type: "TOGGLE_IS_FETCHING", isFetching} as const ),
     setIsAuth: (auth: boolean) => ({type: 'SET_AUTH', auth} as const)
 }
 
 //Thunk
 export const requestIsAuth = (roomId: string, userName: string): ThunkType => async (dispatch) => {
     try {
-        debugger
+        dispatch(actions.toggleIsFetching(true));
         await loginAPI.login(roomId, userName);
         dispatch(actions.setIsAuth(true))
     } catch (e) {
         console.log(e)
     }
+    dispatch(actions.toggleIsFetching(false));
 }
 
 //Types
