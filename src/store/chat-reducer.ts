@@ -5,11 +5,26 @@ import {socketAPI} from "../api/socket";
 
 let initialState = {
     joined: false,
-    isFetching: false
+    isFetching: false,
+    users: [] as string[],
+    messages: [] as string[]
+
 }
 
 export const ChatReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
+        case "SET_USERS": {
+            return {
+                ...state,
+                users: action.users
+            }
+        }
+        case "SET_MESSAGES": {
+            return  {
+                ...state,
+                messages: action.messages
+            }
+        }
         case "SET_JOIN": {
             return {
                 ...state,
@@ -28,9 +43,11 @@ export const ChatReducer = (state = initialState, action: ActionsTypes): Initial
 }
 
 //Actions
-const actions = {
+export const actions = {
     toggleIsFetching: (isFetching: boolean) => ({type: "TOGGLE_IS_FETCHING", isFetching} as const ),
-    setJoin: (joined: boolean) => ({type: 'SET_JOIN', joined} as const)
+    setJoin: (joined: boolean) => ({type: 'SET_JOIN', joined} as const),
+    setUsers: (users: string[]) => ({type: 'SET_USERS', users} as const),
+    setMessages: (messages: string[]) => ({type: 'SET_MESSAGES', messages} as const)
 }
 
 //Thunk

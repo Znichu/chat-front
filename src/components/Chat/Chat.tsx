@@ -1,7 +1,13 @@
 import React from "react";
 import style from "./Chat.module.scss"
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/store";
 
 export const Chat = () => {
+
+    const users = useSelector((state: RootState) => state.chat.users);
+    const messages = useSelector((state: RootState) => state.chat.messages);
+
     return (
         <div className={style.chat__container}>
             <header className={style.chat__header}>
@@ -10,10 +16,12 @@ export const Chat = () => {
             </header>
             <main className={style.chat__main}>
                 <div className={style.chat__sidebar}>
-                    <h3><i className="fas fa-comments"></i> Room Name:</h3>
+                    <h3><i className="fas fa-comments"></i>Online ({users.length})</h3>
                     <h2 id="room-name"></h2>
                     <h3><i className="fas fa-users"></i> Users</h3>
-                    <ul id="users"></ul>
+                    <ul id="users">
+                        <li>Sergey</li>
+                    </ul>
                 </div>
                 <div className={style.chat__messages}></div>
             </main>
