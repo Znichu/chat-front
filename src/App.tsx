@@ -5,15 +5,14 @@ import {Chat} from "./components/Chat/Chat";
 import {useDispatch} from "react-redux";
 import {actions} from "./store/chat-reducer";
 
-/*const socket = io('http://localhost:7542');*/
 
 function App() {
     const dispatch = useDispatch();
 
+    const setUsers = (users: string[]) =>  dispatch(actions.setUsers(users));
+
     useEffect(() => {
-        socket.on('ROOM:JOINED', (users: string[]) => {
-            dispatch(actions.setUsers(users))
-        })
+        socket.on('joinRoom', setUsers);
     }, []);
 
     return (

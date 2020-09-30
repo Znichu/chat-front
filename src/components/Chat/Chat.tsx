@@ -20,7 +20,7 @@ export const Chat = () => {
                     <h2 id="room-name"></h2>
                     <h3><i className="fas fa-users"></i> Users</h3>
                     <ul id="users">
-                        <li>Sergey</li>
+                        {users.map(u => <li>{u}</li>)}
                     </ul>
                 </div>
                 <div className={style.chat__messages}></div>

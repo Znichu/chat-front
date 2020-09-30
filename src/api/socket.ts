@@ -1,14 +1,13 @@
 import socket from "../socket"
 
 export const socketAPI = {
-    socket: null as null | SocketIOClient.Socket,
-
 
     roomJoin (roomId: string, userName: string) {
-        socket.emit('ROOM:JOIN', {roomId, userName})
+        debugger
+        socket.emit('joinRoom', {roomId, userName})
     },
-    destroyConnection() {
-        this.socket?.disconnect();
+/*    destroyConnection() {
+        socket?.disconnect();
         this.socket = null
     },
     sendName(name: string) {
@@ -24,5 +23,5 @@ export const socketAPI = {
     },
     typeMessage() {
         this.socket?.emit('client-typed');
-    }
+    }*/
 };

@@ -54,9 +54,8 @@ export const actions = {
 export const requestJoin = (roomId: string, userName: string): ThunkType => async (dispatch) => {
     try {
         dispatch(actions.toggleIsFetching(true));
-        await joinAPI.join(roomId, userName);
-        dispatch(actions.setJoin(true));
         socketAPI.roomJoin(roomId, userName);
+
     } catch (e) {
         console.log(e)
     }
