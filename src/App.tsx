@@ -9,11 +9,11 @@ import {actions} from "./store/chat-reducer";
 function App() {
     const dispatch = useDispatch();
 
-    const setUsers = (users: string[]) =>  dispatch(actions.setUsers(users));
+/*    const setUsers = (users: string[]) =>  dispatch(actions.setUsers(users));
 
     useEffect(() => {
         socket.on('joinRoom', setUsers);
-    }, []);
+    }, []);*/
 
     return (
         <>

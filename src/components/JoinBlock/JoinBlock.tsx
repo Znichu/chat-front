@@ -4,7 +4,6 @@ import {Button, Input} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {requestJoin} from "../../store/chat-reducer";
 import {RootState} from "../../store/store";
-import socket from "../../socket";
 
 
 export const JoinBlock: React.FC = () => {

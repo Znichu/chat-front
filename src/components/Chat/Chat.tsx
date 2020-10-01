@@ -1,12 +1,27 @@
-import React from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import style from "./Chat.module.scss"
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/store";
+import {chatSubscribe, requestSendNewMessage} from "../../store/chat-reducer";
 
 export const Chat = () => {
+    const dispatch = useDispatch();
 
-    const users = useSelector((state: RootState) => state.chat.users);
-    const messages = useSelector((state: RootState) => state.chat.messages);
+    const [message, setMessage] = useState('');
+
+    const {users, messages, roomId, userName} = useSelector((state: RootState) => state.chat);
+
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setMessage(e.target.value)
+    }
+
+    const sendNewMessage = () => {
+        dispatch(requestSendNewMessage(message, roomId, userName))
+    }
+
+    useEffect(() => {
+        dispatch(chatSubscribe())
+    }, []);
 
     return (
         <div className={style.chat__container}>
@@ -23,20 +38,23 @@ export const Chat = () => {
                         {users.map(u => <li>{u}</li>)}
                     </ul>
                 </div>
-                <div className={style.chat__messages}></div>
+                <div className={style.chat__messages}>
+                    {
+                        messages.map(message => <p>{message.text}</p>)
+                    }
+                </div>
             </main>
-            {/*<div className="chat-form-container">
-                <form id="chat-form">
-                    <input
-                        id="msg"
-                        type="text"
-                        placeholder="Enter Message"
-                        required
-                        autoComplete="off"
-                    />
-                    <button className="btn"><i className="fas fa-paper-plane"></i> Send</button>
-                </form>
-            </div>*/}
+            <div className="chat-form-container">
+                <input
+                    type="text"
+                    placeholder="Enter Message"
+                    value={message}
+                    required
+                    autoComplete="off"
+                    onChange={onChange}
+                />
+                <button onClick={sendNewMessage} className="btn"><i className="fas fa-paper-plane"></i> Send</button>
+            </div>
         </div>
     )
 }
