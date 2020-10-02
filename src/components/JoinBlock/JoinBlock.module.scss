@@ -6,6 +6,7 @@
   align-items: center;
   font-family: 'Oswald', sans-serif;
   letter-spacing: 1.5px;
+  background-color: #1c1c1c;
   .content {
     display: flex;
     flex-direction: column;
@@ -16,6 +17,9 @@
     .header {
       font-size: 25px;
       font-family: 'Kaushan Script', cursive;
+      h1{
+        color: white;
+      }
     }
     .join {
       display: flex;
@@ -25,10 +29,21 @@
       width: 100%;
       input {
         letter-spacing: 0.8px;
+        font-size: 18px;
         margin-bottom: 10px;
+        background-color: #353535;
+        border: none;
+        color: #ffeeff;
       }
       button {
+        font-size: 18px;
         width: 100%;
+        height: 40px;
+        background: #182533;
+        border: none;
+        &:hover {
+          background: #17212B;
+        }
       }
     }
   }

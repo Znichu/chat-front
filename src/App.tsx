@@ -2,23 +2,18 @@ import React, {useEffect} from 'react';
 import {JoinBlock} from "./components/JoinBlock/JoinBlock";
 import socket from "./socket";
 import {Chat} from "./components/Chat/Chat";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {actions} from "./store/chat-reducer";
+import {RootState} from "./store/store";
 
 
-function App() {
-    const dispatch = useDispatch();
+const App = () => {
 
-/*    const setUsers = (users: string[]) =>  dispatch(actions.setUsers(users));
-
-    useEffect(() => {
-        socket.on('joinRoom', setUsers);
-    }, []);*/
+    const joined = useSelector((state: RootState) => state.chat.joined);
 
     return (
         <>
-            <JoinBlock />
-            <Chat/>
+            {!joined ? <JoinBlock /> : <Chat/> }
         </>
     );
 }

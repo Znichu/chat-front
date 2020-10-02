@@ -1,8 +1,8 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import style from "./JoinBlock.module.scss"
 import {Button, Input} from "antd";
 import {useDispatch, useSelector} from "react-redux";
-import {requestJoin} from "../../store/chat-reducer";
+import {chatSubscribe, requestJoin} from "../../store/chat-reducer";
 import {RootState} from "../../store/store";
 
 
@@ -26,7 +26,12 @@ export const JoinBlock: React.FC = () => {
     const loginChat = () => {
         dispatch(requestJoin(roomId, userName))
     }
-        return (
+
+    useEffect(() => {
+        dispatch(chatSubscribe())
+    }, [])
+
+    return (
         <div className={style.wrapper}>
             <div className={style.content}>
                 <div className={style.header}>
@@ -35,7 +40,7 @@ export const JoinBlock: React.FC = () => {
                 <div className={style.join}>
                     <Input onChange={onChangeRoomId} value={roomId} placeholder="Enter ID room"/>
                     <Input onChange={onChangeUserName} value={userName} placeholder="Enter your username"/>
-                    <Button loading={isFetching} onClick={loginChat} type="primary">SEND</Button>
+                    <Button loading={isFetching} onClick={loginChat} type="primary">JOIN</Button>
                 </div>
 
             </div>

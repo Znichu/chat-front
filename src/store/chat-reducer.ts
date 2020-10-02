@@ -20,7 +20,7 @@ export const ChatReducer = (state = initialState, action: ActionsTypes): Initial
             return {
                 ...state,
                 users: action.data.users,
-                messages: action.data.messages
+                messages: [...state.messages, ...action.data.messages]
             }
         }
         case "SET_USERS": {
@@ -89,7 +89,6 @@ export const requestJoin = (roomId: string, userName: string): ThunkType => asyn
 export const chatSubscribe = (): ThunkType => async (dispatch) => {
     socketAPI.createConnection();
     socketAPI.subscribe((data) => {
-        debugger
         dispatch(actions.setUsers(data.users))
     },
         (message) => {
