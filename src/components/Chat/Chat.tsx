@@ -2,17 +2,18 @@ import React, {ChangeEvent, useState} from "react";
 import style from "./Chat.module.scss"
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/store";
-import {requestSendNewMessage} from "../../store/chat-reducer";
+import {requestSendNewMessage, requestTypeMessage} from "../../store/chat-reducer";
 
 export const Chat = () => {
     const dispatch = useDispatch();
 
     const [newMessage, setMessage] = useState('');
 
-    const {users, messages, roomId, userName} = useSelector((state: RootState) => state.chat);
+    const {users, messages, roomId, userName, typingUsers} = useSelector((state: RootState) => state.chat);
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setMessage(e.target.value)
+        setMessage(e.target.value);
+        dispatch(requestTypeMessage(roomId))
     }
 
     const sendNewMessage = () => {
@@ -38,6 +39,12 @@ export const Chat = () => {
             </p>
         </div>);
 
+    const typingUsersElement = typingUsers.map(user =>
+        <div key={user.id}>
+            <i>{user.userName}</i> is typing
+        </div>
+    );
+
     return (
         <div className={style.chat__wrapper}>
             <div className={style.chat__container}>
@@ -55,6 +62,7 @@ export const Chat = () => {
                     </div>
                     <div className={style.chat__messages}>
                         {messageItem}
+                        {typingUsersElement}
                     </div>
                 </main>
                 <div className={style.chat__form}>

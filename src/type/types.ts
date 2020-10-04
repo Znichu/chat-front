@@ -6,6 +6,7 @@ export type ChatDataType = {
 export type ChatUserType = {
     id: string
     userName: string
+    urlAvatar: string
 }
 
 export type ChatMessageType = {
