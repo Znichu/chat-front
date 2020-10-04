@@ -28,9 +28,9 @@ export const Chat = () => {
     }
 
     const messageItem = messages.map(msg =>
-        <div className={style.message}>
+        <div key={msg.id} className={style.message}>
             <p className={style.meta}>
-                {msg.username}
+                {msg.userName}
                 <span>{msg.time}</span>
             </p>
             <p>
@@ -50,7 +50,7 @@ export const Chat = () => {
                         <h3><i className="fas fa-comments"></i> Online: {users.length}</h3>
                         <h3><i className="fas fa-users"></i> Users</h3>
                         <ul id="users">
-                            {users.map(user => <li>{user}</li>)}
+                            {users.map(user => <li key={user.id}>{user.userName}</li>)}
                         </ul>
                     </div>
                     <div className={style.chat__messages}>

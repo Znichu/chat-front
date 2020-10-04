@@ -1,15 +1,15 @@
-import { ThunkAction } from "redux-thunk";
+import {ThunkAction} from "redux-thunk";
 import {InferActionTypes, RootState} from "./store";
 import {joinAPI} from "../api/join";
 import {socketAPI} from "../api/socket";
-import {ChatDataType, ChatMessageType} from "../type/types";
+import {ChatDataType, ChatMessageType, ChatUserType} from "../type/types";
 
 let initialState = {
     roomId: '',
     userName: '',
     joined: false,
     isFetching: false,
-    users: [] as string[],
+    users: [] as ChatUserType[],
     messages: [] as ChatMessageType[]
 
 }
@@ -27,12 +27,6 @@ export const ChatReducer = (state = initialState, action: ActionsTypes): Initial
             return {
                 ...state,
                 users: action.users
-            }
-        }
-        case "SET_MESSAGES": {
-            return  {
-                ...state,
-                messages: action.messages
             }
         }
         case "SET_NEW_MESSAGE": {
@@ -62,10 +56,14 @@ export const ChatReducer = (state = initialState, action: ActionsTypes): Initial
 
 //Actions
 export const actions = {
-    toggleIsFetching: (isFetching: boolean) => ({type: "TOGGLE_IS_FETCHING", isFetching} as const ),
-    setJoin: (joined: boolean, roomId: string, userName: string) => ({type: 'SET_JOIN', joined, roomId, userName} as const),
-    setUsers: (users: string[]) => ({type: 'SET_USERS', users} as const),
-    setMessages: (messages: ChatMessageType[]) => ({type: 'SET_MESSAGES', messages} as const),
+    toggleIsFetching: (isFetching: boolean) => ({type: "TOGGLE_IS_FETCHING", isFetching} as const),
+    setJoin: (joined: boolean, roomId: string, userName: string) => ({
+        type: 'SET_JOIN',
+        joined,
+        roomId,
+        userName
+    } as const),
+    setUsers: (users: ChatUserType[]) => ({type: 'SET_USERS', users} as const),
     setNewMessage: (message: ChatMessageType) => ({type: 'SET_NEW_MESSAGE', message} as const),
     setChatData: (data: ChatDataType) => ({type: 'SET_CHAT_DATA', data} as const)
 }
@@ -74,12 +72,11 @@ export const actions = {
 export const requestJoin = (roomId: string, userName: string): ThunkType => async (dispatch) => {
     try {
         dispatch(actions.toggleIsFetching(true));
-        await joinAPI.join(roomId,userName);
+        await joinAPI.join(roomId, userName);
         dispatch(actions.setJoin(true, roomId, userName));
-        socketAPI.roomJoin(roomId, userName,
-            (data) => {
-                dispatch(actions.setChatData(data))
-            });
+        socketAPI.roomJoin(roomId, userName);
+        const data = await joinAPI.getRoomData(roomId);
+        dispatch(actions.setChatData(data))
     } catch (e) {
         console.log(e)
     }
@@ -88,12 +85,12 @@ export const requestJoin = (roomId: string, userName: string): ThunkType => asyn
 
 export const chatSubscribe = (): ThunkType => async (dispatch) => {
     socketAPI.createConnection();
-    socketAPI.subscribe((data) => {
-        dispatch(actions.setUsers(data.users))
-    },
+    socketAPI.subscribe((users) => {
+            dispatch(actions.setUsers(users))
+        },
         (message) => {
             dispatch(actions.setNewMessage(message))
-    });
+        });
 }
 
 export const requestSendNewMessage = (message: string, roomId: string, userName: string): ThunkType => async (dispatch) => {

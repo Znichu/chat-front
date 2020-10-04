@@ -1,10 +1,16 @@
 export type ChatDataType = {
-    users: string[]
+    users: ChatUserType[]
     messages: ChatMessageType[]
 }
 
+export type ChatUserType = {
+    id: string
+    userName: string
+}
+
 export type ChatMessageType = {
-    username: string
+    id: string
+    userName: string
     text: string
     time: string
 }

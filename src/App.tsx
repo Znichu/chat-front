@@ -1,9 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {JoinBlock} from "./components/JoinBlock/JoinBlock";
-import socket from "./socket";
 import {Chat} from "./components/Chat/Chat";
-import {useDispatch, useSelector} from "react-redux";
-import {actions} from "./store/chat-reducer";
+import {useSelector} from "react-redux";
 import {RootState} from "./store/store";
 
 
