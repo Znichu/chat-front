@@ -10,11 +10,12 @@ export const socketAPI = {
 
     subscribe(setUsers: (users: ChatUserType[]) => void,
               setNewMessage: (message: ChatMessageType) => void,
-              userTypingHandler: (user: ChatUserType) => void
+              userTypingHandler: (user: ChatUserType[]) => void
     ) {
         this.socket?.on('ROOM:NEW_MESSAGE', setNewMessage);
         this.socket?.on('ROOM:SET_USERS', setUsers);
-        this.socket?.on('ROOM:USER_TYPED', userTypingHandler)
+        this.socket?.on('ROOM:USER_TYPED', userTypingHandler);
+        this.socket?.on('ROOM:USER_STOPPED_TYPING', userTypingHandler)
     },
 
     roomJoin(roomId: string, userName: string, urlAvatar: string) {
@@ -27,5 +28,8 @@ export const socketAPI = {
     },
     typeMessage(roomId: string) {
         this.socket?.emit('ROOM:USER_TYPED', {roomId});
+    },
+    stopTypeMessage(roomId: string) {
+        this.socket?.emit('ROOM:USER_STOPPED_TYPING', {roomId});
     }
 };

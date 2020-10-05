@@ -2,7 +2,7 @@ import React, {ChangeEvent, useState} from "react";
 import style from "./Chat.module.scss"
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/store";
-import {requestSendNewMessage, requestTypeMessage} from "../../store/chat-reducer";
+import {requestSendNewMessage, requestStopTypeMessage, requestTypeMessage} from "../../store/chat-reducer";
 
 export const Chat = () => {
     const dispatch = useDispatch();
@@ -13,18 +13,23 @@ export const Chat = () => {
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value);
-        dispatch(requestTypeMessage(roomId))
+        dispatch(requestTypeMessage(roomId));
+        if (e.target.value === '') {
+            dispatch(requestStopTypeMessage(roomId))
+        }
     }
 
     const sendNewMessage = () => {
         dispatch(requestSendNewMessage(newMessage, roomId, userName));
-        setMessage('')
+        setMessage('');
+        dispatch(requestStopTypeMessage(roomId))
     }
 
     const keySend = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             sendNewMessage();
-            setMessage('')
+            setMessage('');
+            dispatch(requestStopTypeMessage(roomId))
         }
     }
 
@@ -39,11 +44,7 @@ export const Chat = () => {
             </p>
         </div>);
 
-    const typingUsersElement = typingUsers.map(user =>
-        <div key={user.id}>
-            <i>{user.userName}</i> is typing
-        </div>
-    );
+    const userTyping = typingUsers.map(user => <span><i>{user.userName}</i> is typing</span>);
 
     return (
         <div className={style.chat__wrapper}>
@@ -62,7 +63,14 @@ export const Chat = () => {
                     </div>
                     <div className={style.chat__messages}>
                         {messageItem}
-                        {typingUsersElement}
+                        {
+                            typingUsers.length !== 0
+                                ?
+                                <div>
+                                    {typingUsers.length > 1 ? 'Several people are typing' : userTyping}
+                                </div>
+                                : null
+                        }
                     </div>
                 </main>
                 <div className={style.chat__form}>

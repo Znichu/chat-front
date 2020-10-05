@@ -53,13 +53,7 @@ export const ChatReducer = (state = initialState, action: ActionsTypes): Initial
         case "TYPING_USER_ADDED": {
             return {
                 ...state,
-                typingUsers: [...state.typingUsers.filter(user => user.id !== action.user.id), action.user]
-            }
-        }
-        case "TYPING_USER_DELETE": {
-            return {
-                ...state,
-                typingUsers: state.typingUsers.filter(user => user.id !== action.user.id)
+                typingUsers: action.user
             }
         }
         default:
@@ -79,8 +73,7 @@ export const actions = {
     setUsers: (users: ChatUserType[]) => ({type: 'SET_USERS', users} as const),
     setNewMessage: (message: ChatMessageType) => ({type: 'SET_NEW_MESSAGE', message} as const),
     setChatData: (data: ChatDataType) => ({type: 'SET_CHAT_DATA', data} as const),
-    typingUserAdded: (user: ChatUserType) => ({type: 'TYPING_USER_ADDED', user} as const),
-    typingUserDelete: (user: ChatUserType) => ({type: 'TYPING_USER_DELETE', user} as const)
+    typingUserAdded: (user: ChatUserType[] | []) => ({type: 'TYPING_USER_ADDED', user} as const),
 }
 
 //Thunk
@@ -98,8 +91,6 @@ export const requestJoin = (roomId: string, userName: string, urlAvatar: string)
     dispatch(actions.toggleIsFetching(false));
 }
 
-let timerId = 0;
-
 export const chatSubscribe = (): ThunkType => async (dispatch) => {
     socketAPI.createConnection();
     socketAPI.subscribe((users) => {
@@ -108,12 +99,8 @@ export const chatSubscribe = (): ThunkType => async (dispatch) => {
         (message) => {
             dispatch(actions.setNewMessage(message))
         },
-        (user: ChatUserType) => {
+        (user: ChatUserType[]) => {
             dispatch(actions.typingUserAdded(user));
-            clearTimeout(timerId);
-            timerId = window.setTimeout(() => {
-                dispatch(actions.typingUserDelete(user))
-            }, 5000)
         })
 }
 
@@ -123,6 +110,10 @@ export const requestSendNewMessage = (message: string, roomId: string, userName:
 
 export const requestTypeMessage = (roomId: string): ThunkType => async (dispatch) => {
     socketAPI.typeMessage(roomId)
+}
+
+export const requestStopTypeMessage = (roomId: string): ThunkType => async (dispatch) => {
+    socketAPI.stopTypeMessage(roomId)
 }
 
 //Types
