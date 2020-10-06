@@ -47,7 +47,7 @@ export const Chat = () => {
         </div>);
 
     return (
-        <div className={style.chat__wrapper}>
+        <div className={`${style.chat__wrapper} ${style.custom}`}>
             <div className={style.chat__container}>
                 <header className={style.chat__header}>
                     <h1><i className="fas fa-smile"></i> Chat</h1>
@@ -76,8 +76,6 @@ export const Chat = () => {
                         type="text"
                         placeholder="Enter Message"
                         value={newMessage}
-                        required
-                        autoComplete="off"
                         onChange={onChange}
                         autoFocus={true}
                         onKeyPress={keySend}
