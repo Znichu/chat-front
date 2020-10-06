@@ -3,6 +3,7 @@ import style from "./Chat.module.scss"
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/store";
 import {requestSendNewMessage, requestStopTypeMessage, requestTypeMessage} from "../../store/chat-reducer";
+import {Typing} from "../Typing/Typing";
 
 export const Chat = () => {
     const dispatch = useDispatch();
@@ -61,6 +62,7 @@ export const Chat = () => {
                             </div>
                             : null
                     }
+                    <Typing/>
 
                     <a href="index.html" className={style.btn}>Leave Room</a>
                 </header>
