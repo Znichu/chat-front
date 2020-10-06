@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import style from "./Chat.module.scss"
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/store";
@@ -9,8 +9,31 @@ export const Chat = () => {
     const dispatch = useDispatch();
 
     const [newMessage, setMessage] = useState('');
+    const [isAutoScrollActive, setIsAutoScrollActive] = useState(true);
+    const [lastScrollTop, setLastScrollTop] = useState(0);
+
 
     const {users, messages, roomId, userName, typingUsers} = useSelector((state: RootState) => state.chat);
+
+    useEffect(() => {
+        if (isAutoScrollActive) {
+            messagesAnchorRef.current?.scrollIntoView({behavior: 'smooth'})
+        }
+    }, [messages, typingUsers]);
+
+    const messagesAnchorRef = useRef<HTMLDivElement>(null);
+
+    //Auto scroll messages
+    const scrollMessages = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+        let element = e.currentTarget;
+        const maxScrollPosition = element.scrollHeight - element.clientHeight;
+        if (element.scrollTop > lastScrollTop && Math.abs(maxScrollPosition - element.scrollTop) < 2) {
+            setIsAutoScrollActive(true)
+        } else {
+            setIsAutoScrollActive(false)
+        }
+        setLastScrollTop(element.scrollTop)
+    };
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value);
@@ -67,8 +90,9 @@ export const Chat = () => {
                             {users.map(user => <li key={user.id}><img src={user.urlAvatar} alt="user"/> {user.userName}</li>)}
                         </ul>
                     </div>
-                    <div className={style.chat__messages}>
+                    <div className={style.chat__messages} onScroll={scrollMessages}>
                         {messageItem}
+                        <div ref={messagesAnchorRef}></div>
                     </div>
                 </main>
                 <div className={style.chat__form}>
