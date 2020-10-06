@@ -46,8 +46,6 @@ export const Chat = () => {
             </p>
         </div>);
 
-    const userTyping = typingUsers.map(user => <span>{user.userName} is typing</span>);
-
     return (
         <div className={style.chat__wrapper}>
             <div className={style.chat__container}>
@@ -56,14 +54,9 @@ export const Chat = () => {
 
                     {
                         typingUsers.length !== 0
-                            ?
-                            <div className={style.typers}>
-                                {typingUsers.length > 1 ? 'Several people are typing' : userTyping}
-                            </div>
+                            ? <Typing typingUsers={typingUsers}/>
                             : null
                     }
-                    <Typing/>
-
                     <a href="index.html" className={style.btn}>Leave Room</a>
                 </header>
                 <main className={style.chat__main}>
@@ -71,7 +64,7 @@ export const Chat = () => {
                         <h3><i className="fas fa-comments"></i> Online: {users.length}</h3>
                         <h3><i className="fas fa-users"></i> Users</h3>
                         <ul id="users">
-                            {users.map(user => <li key={user.id}>{user.userName}</li>)}
+                            {users.map(user => <li key={user.id}><img src={user.urlAvatar} alt="user"/> {user.userName}</li>)}
                         </ul>
                     </div>
                     <div className={style.chat__messages}>

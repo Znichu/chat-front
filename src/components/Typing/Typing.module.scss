@@ -2,14 +2,14 @@ $white: #F9FBFF;
 $dark: #777777;
 
 .typing {
+  display: flex;
   .bubble {
     text-align: center;
-
     span {
       display: inline-block;
-      background-color: #B6B5BA;
-      width: 15px;
-      height: 15px;
+      background-color: #2A5378;
+      width: 5px;
+      height: 5px;
       border-radius: 100%;
       margin-right: 5px;
       animation: bob 2s infinite;
@@ -28,19 +28,25 @@ $dark: #777777;
       }
     }
   }
+  .user {
+    color: #fefefe;
+    margin-left: 8px;
+  }
 }
 
 @keyframes bob {
   10% {
     transform: translateY(-10px);
-    background-color: #9E9DA2;
   }
-
-  50% {
+  30% {
     transform: translateY(0);
-    background-color: #B6B5BA;
   }
-
+  50% {
+    transform: translateY(-10px);
+  }
+  70% {
+    transform: translateY(0);
+  }
 }
 
 
