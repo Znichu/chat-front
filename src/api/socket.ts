@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import {ChatMessageType, ChatUserType} from "../type/types";
+import {ChatUserType, MessageObjectType} from "../type/types";
 
 export const socketAPI = {
     socket: null as null | SocketIOClient.Socket,
@@ -9,7 +9,7 @@ export const socketAPI = {
     },
 
     subscribe(setUsers: (users: ChatUserType[]) => void,
-              setNewMessage: (message: ChatMessageType) => void,
+              setNewMessage: (message: MessageObjectType) => void,
               userTypingHandler: (user: ChatUserType[]) => void
     ) {
         this.socket?.on('ROOM:NEW_MESSAGE', setNewMessage);
@@ -18,11 +18,11 @@ export const socketAPI = {
         this.socket?.on('ROOM:USER_STOPPED_TYPING', userTypingHandler)
     },
 
-    roomJoin(roomId: string, userName: string, urlAvatar: string) {
-        this.socket?.emit('ROOM:JOIN', {roomId, userName, urlAvatar});
+    roomJoin(roomId: string, userName: string) {
+        this.socket?.emit('ROOM:JOIN', {roomId, userName});
     },
-    sendMessage(message: string, roomId: string, userName: string) {
-        this.socket?.emit('ROOM:NEW_MESSAGE', {message, roomId, userName}, (error: string | null) => {
+    sendMessage(message: string, roomId: string) {
+        this.socket?.emit('ROOM:NEW_MESSAGE', {message, roomId}, (error: string | null) => {
             if (error) console.log(error);
         })
     },

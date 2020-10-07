@@ -1,13 +1,10 @@
-$white: #F9FBFF;
-$dark: #777777;
-
 .typing {
   display: flex;
   .bubble {
     text-align: center;
     span {
       display: inline-block;
-      background-color: #2A5378;
+      background-color: #0086FF;
       width: 5px;
       height: 5px;
       border-radius: 100%;
@@ -29,7 +26,7 @@ $dark: #777777;
     }
   }
   .user {
-    color: #fefefe;
+    color: #d1d1d2;
     margin-left: 8px;
   }
 }

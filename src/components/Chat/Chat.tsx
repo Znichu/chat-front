@@ -5,6 +5,7 @@ import {RootState} from "../../store/store";
 import {requestSendNewMessage, requestStopTypeMessage, requestTypeMessage} from "../../store/chat-reducer";
 import {Typing} from "../Typing/Typing";
 import {ChatMessage} from "../ChatMessage/ChatMessage";
+import {ChatUser} from "../ChatUser/ChatUser";
 
 export const Chat = () => {
     const dispatch = useDispatch();
@@ -14,7 +15,7 @@ export const Chat = () => {
     const [lastScrollTop, setLastScrollTop] = useState(0);
 
 
-    const {users, messages, roomId, userName, typingUsers} = useSelector((state: RootState) => state.chat);
+    const {users, messages, roomId, typingUsers} = useSelector((state: RootState) => state.chat);
 
     useEffect(() => {
         if (isAutoScrollActive) {
@@ -46,7 +47,7 @@ export const Chat = () => {
 
     const sendNewMessage = () => {
         if (newMessage !== '') {
-            dispatch(requestSendNewMessage(newMessage, roomId, userName));
+            dispatch(requestSendNewMessage(newMessage, roomId));
             setMessage('');
             dispatch(requestStopTypeMessage(roomId))
         }
@@ -59,18 +60,19 @@ export const Chat = () => {
         }
     }
 
-    const messageItem = messages.map(msg => <ChatMessage urlAvatar={msg.userName}
-                                                         userName={msg.userName}
-                                                         time={msg.time}
-                                                         text={msg.text}
-                                                         key={msg.id}
+    const messageItem = messages.map(msg => <ChatMessage urlAvatar={msg.user.urlAvatar}
+                                                         userName={msg.user.userName}
+                                                         time={msg.message.time}
+                                                         text={msg.message.text}
+                                                         key={msg.message.id}
         />
         );
+    const chatUser = users.map(user => <ChatUser key={user.id} urlAvatar={user.urlAvatar} userName={user.userName}/>);
 
     return (
         <div className={style.chat}>
             <div className={style.header}>
-                <h1><i className="fas fa-smile"></i> React Chat</h1>
+                <h1><i className="fab fa-react"></i> React Chat</h1>
 
                 {
                     typingUsers.length !== 0
@@ -82,11 +84,8 @@ export const Chat = () => {
             <div className={style.wrapper}>
                 <div className={style.conversation__area}>
                     <h3><i className="fas fa-comments"></i> Online: {users.length}</h3>
-                    <h3><i className="fas fa-users"></i> Users</h3>
-                    <ul id="users">
-                        {users.map(user => <li key={user.id}><img src={user.urlAvatar} alt="user"/> {user.userName}
-                        </li>)}
-                    </ul>
+                    <div className={style.separator}></div>
+                    {chatUser}
                 </div>
                 <div className={style.chat__area} onScroll={scrollMessages}>
                     <div className={style.chat__area_main}>
@@ -96,7 +95,7 @@ export const Chat = () => {
                     <div className={style.chat__area_footer}>
 
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                             strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
                              className="feather feather-paperclip">
                             <path
                                 d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>

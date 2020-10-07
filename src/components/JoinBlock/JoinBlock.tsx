@@ -4,7 +4,6 @@ import {Button, Input} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {chatSubscribe, requestJoin} from "../../store/chat-reducer";
 import {RootState} from "../../store/store";
-import {getAvatar} from "../../commons/helpers";
 
 
 export const JoinBlock: React.FC = () => {
@@ -25,8 +24,7 @@ export const JoinBlock: React.FC = () => {
     }
 
     const loginChat = () => {
-        const urlAvatar = getAvatar();
-        dispatch(requestJoin(roomId, userName, urlAvatar))
+        dispatch(requestJoin(roomId, userName))
     }
 
     useEffect(() => {

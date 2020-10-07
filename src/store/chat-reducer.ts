@@ -2,8 +2,7 @@ import {ThunkAction} from "redux-thunk";
 import {InferActionTypes, RootState} from "./store";
 import {joinAPI} from "../api/join";
 import {socketAPI} from "../api/socket";
-import {ChatDataType, ChatMessageType, ChatUserType} from "../type/types";
-import {Dispatch} from "redux";
+import {ChatDataType, ChatUserType, MessageObjectType} from "../type/types";
 
 let initialState = {
     roomId: '',
@@ -11,7 +10,7 @@ let initialState = {
     joined: false,
     isFetching: false,
     users: [] as ChatUserType[],
-    messages: [] as ChatMessageType[],
+    messages: [] as MessageObjectType[],
     typingUsers: [] as ChatUserType[]
 }
 
@@ -71,18 +70,18 @@ export const actions = {
         userName
     } as const),
     setUsers: (users: ChatUserType[]) => ({type: 'SET_USERS', users} as const),
-    setNewMessage: (message: ChatMessageType) => ({type: 'SET_NEW_MESSAGE', message} as const),
+    setNewMessage: (message: MessageObjectType) => ({type: 'SET_NEW_MESSAGE', message} as const),
     setChatData: (data: ChatDataType) => ({type: 'SET_CHAT_DATA', data} as const),
     typingUserAdded: (user: ChatUserType[] | []) => ({type: 'TYPING_USER_ADDED', user} as const),
 }
 
 //Thunk
-export const requestJoin = (roomId: string, userName: string, urlAvatar: string): ThunkType => async (dispatch) => {
+export const requestJoin = (roomId: string, userName: string): ThunkType => async (dispatch) => {
     try {
         dispatch(actions.toggleIsFetching(true));
         await joinAPI.join(roomId, userName);
         dispatch(actions.setJoin(true, roomId, userName));
-        socketAPI.roomJoin(roomId, userName, urlAvatar);
+        socketAPI.roomJoin(roomId, userName);
         const data = await joinAPI.getRoomData(roomId);
         dispatch(actions.setChatData(data))
     } catch (e) {
@@ -104,8 +103,8 @@ export const chatSubscribe = (): ThunkType => async (dispatch) => {
         })
 }
 
-export const requestSendNewMessage = (message: string, roomId: string, userName: string): ThunkType => async (dispatch) => {
-    socketAPI.sendMessage(message, roomId, userName)
+export const requestSendNewMessage = (message: string, roomId: string): ThunkType => async (dispatch) => {
+    socketAPI.sendMessage(message, roomId)
 }
 
 export const requestTypeMessage = (roomId: string): ThunkType => async (dispatch) => {
