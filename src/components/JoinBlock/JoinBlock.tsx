@@ -24,7 +24,9 @@ export const JoinBlock: React.FC = () => {
     }
 
     const loginChat = () => {
-        dispatch(requestJoin(roomId, userName))
+        if (roomId && userName ) {
+            dispatch(requestJoin(roomId, userName))
+        }
     }
 
     useEffect(() => {
