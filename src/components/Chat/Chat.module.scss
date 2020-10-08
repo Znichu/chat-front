@@ -75,12 +75,6 @@
         position: sticky;
         bottom: 0;
         left: 0;
-        svg {
-          color: #7c7e80;
-          width: 20px;
-          flex-shrink: 0;
-          cursor: pointer;
-        }
         input {
           border: none;
           color: #d1d1d2;
@@ -94,18 +88,18 @@
             outline: none;
           }
         }
-        .btn {
-          width: 80px;
-          height: 47px;
-          cursor: pointer;
-          padding: 5px 10px;
-          background: #2f3236;
-          color: #d1d1d2;
-          border: none;
-          font-size: 13px;
-          border-radius: 6px;
-        }
       }
     }
   }
 }
+.btn {
+  height: 47px;
+  cursor: pointer;
+  padding: 5px 10px;
+  background: #2f3236;
+  color: #d1d1d2;
+  border: none;
+  font-size: 13px;
+  border-radius: 6px;
+}
+

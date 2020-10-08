@@ -1,0 +1,16 @@
+.upload__block {
+  label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    svg {
+      color: #7c7e80;
+      width: 25px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    input {
+      display: none;
+    }
+  }
+}

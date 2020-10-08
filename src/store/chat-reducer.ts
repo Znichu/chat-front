@@ -43,6 +43,16 @@ export const ChatReducer = (state = initialState, action: ActionsTypes): Initial
                 joined: action.joined
             }
         }
+        case "LEAVE_ROOM": {
+            return {
+                ...state,
+                joined: action.joined,
+                roomId: '',
+                userName: '',
+                messages: [],
+                users: []
+            }
+        }
         case "TOGGLE_IS_FETCHING": {
             return {
                 ...state,
@@ -73,6 +83,7 @@ export const actions = {
     setNewMessage: (message: MessageObjectType) => ({type: 'SET_NEW_MESSAGE', message} as const),
     setChatData: (data: ChatDataType) => ({type: 'SET_CHAT_DATA', data} as const),
     typingUserAdded: (user: ChatUserType[] | []) => ({type: 'TYPING_USER_ADDED', user} as const),
+    leaveRoom: (joined: boolean) => ({type: 'LEAVE_ROOM', joined} as const)
 }
 
 //Thunk
@@ -113,6 +124,11 @@ export const requestTypeMessage = (roomId: string): ThunkType => async (dispatch
 
 export const requestStopTypeMessage = (roomId: string): ThunkType => async (dispatch) => {
     socketAPI.stopTypeMessage(roomId)
+}
+
+export const leaveChatRoom = ():ThunkType => async (dispatch) => {
+    dispatch(actions.leaveRoom(false))
+    socketAPI.leaveChatRoom()
 }
 
 //Types

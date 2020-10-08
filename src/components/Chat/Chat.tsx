@@ -2,10 +2,16 @@ import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import style from "./Chat.module.scss"
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/store";
-import {requestSendNewMessage, requestStopTypeMessage, requestTypeMessage} from "../../store/chat-reducer";
+import {
+    leaveChatRoom,
+    requestSendNewMessage,
+    requestStopTypeMessage,
+    requestTypeMessage
+} from "../../store/chat-reducer";
 import {Typing} from "../Typing/Typing";
 import {ChatMessage} from "../ChatMessage/ChatMessage";
 import {ChatUser} from "../ChatUser/ChatUser";
+import {UploadFile} from "../UploadFile/UploadFile";
 
 export const Chat = () => {
     const dispatch = useDispatch();
@@ -66,7 +72,7 @@ export const Chat = () => {
                                                          text={msg.message.text}
                                                          key={msg.message.id}
         />
-        );
+    );
     const chatUser = users.map(user => <ChatUser key={user.id} urlAvatar={user.urlAvatar} userName={user.userName}/>);
 
     return (
@@ -79,7 +85,9 @@ export const Chat = () => {
                         ? <Typing typingUsers={typingUsers}/>
                         : null
                 }
-                <a href="index.html" className={style.btn}>Leave Room</a>
+                <button className={style.btn} onClick={() => dispatch(leaveChatRoom())}>
+                    Leave Room
+                </button>
             </div>
             <div className={style.wrapper}>
                 <div className={style.conversation__area}>
@@ -94,12 +102,16 @@ export const Chat = () => {
                     </div>
                     <div className={style.chat__area_footer}>
 
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        <UploadFile/>
+
+{/*                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor"
                              strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
                              className="feather feather-paperclip">
                             <path
                                 d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
-                        </svg>
+                        </svg>*/}
+
 
                         <input
                             type="text"
@@ -109,10 +121,6 @@ export const Chat = () => {
                             autoFocus={true}
                             onKeyPress={keySend}
                         />
-                        <button onClick={sendNewMessage} className={style.btn}>
-                            <i style={{marginRight: "8px"}} className="fas fa-paper-plane"></i>
-                            Send
-                        </button>
                     </div>
                 </div>
             </div>

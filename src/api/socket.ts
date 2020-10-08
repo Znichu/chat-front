@@ -31,5 +31,9 @@ export const socketAPI = {
     },
     stopTypeMessage(roomId: string) {
         this.socket?.emit('ROOM:USER_STOPPED_TYPING', {roomId});
+    },
+    leaveChatRoom() {
+        this.socket?.disconnect();
+        this.socket = null
     }
 };
