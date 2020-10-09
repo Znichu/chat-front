@@ -1,11 +1,12 @@
 import io from 'socket.io-client'
 import {ChatUserType, MessageObjectType} from "../type/types";
+import {baseURL} from "./join";
 
 export const socketAPI = {
     socket: null as null | SocketIOClient.Socket,
 
     createConnection() {
-        this.socket = io('http://localhost:7542');
+        this.socket = io(baseURL);
     },
 
     subscribe(setUsers: (users: ChatUserType[]) => void,

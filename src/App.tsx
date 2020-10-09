@@ -1,6 +1,6 @@
 import React from 'react';
-import {JoinBlock} from "./page/Join/JoinBlock";
-import {Chat} from "./page/Chat/Chat";
+import {JoinPage} from "./page/JoinPage/JoinPage";
+import {ChatPage} from "./page/ChatPage/ChatPage";
 import {useSelector} from "react-redux";
 import {RootState} from "./store/store";
 
@@ -11,7 +11,7 @@ const App = React.memo(() => {
 
     return (
         <>
-            {!joined ? <JoinBlock/> : <Chat/>}
+            {!joined ? <JoinPage/> : <ChatPage/>}
         </>
     );
 })

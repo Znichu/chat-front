@@ -1,11 +1,11 @@
 import React, {ChangeEvent} from "react";
-import style from "./style.module.scss"
+import style from "./SendMessageBlock.module.scss"
 
 
 type PropsType = {
     newMessage: string
     onChange: (e: ChangeEvent<HTMLInputElement>) => void
-    toggleEmojiPicker: () => void
+    showEmojiPicker: () => void
     keySend: (event: React.KeyboardEvent<HTMLInputElement>) => void
     sendNewMessage: () => void
 }
@@ -14,7 +14,7 @@ export const SendMessageBlock: React.FC<PropsType> = (
     {
         newMessage,
         onChange,
-        toggleEmojiPicker,
+        showEmojiPicker,
         keySend,
         sendNewMessage
     }) => {
@@ -47,7 +47,7 @@ export const SendMessageBlock: React.FC<PropsType> = (
                     </svg>
                 </label>
             </div>
-            <svg onClick={toggleEmojiPicker} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            <svg onClick={showEmojiPicker} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor"
                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
                  className="feather feather-smile">

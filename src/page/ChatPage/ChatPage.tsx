@@ -2,38 +2,31 @@ import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import style from "./Chat.module.scss"
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/store";
-import {
-    leaveChatRoom,
-    requestSendNewMessage,
-    requestStopTypeMessage,
-    requestTypeMessage
-} from "../../store/chat-reducer";
-import {Typing} from "../../components/Typing/Typing";
-import {ChatMessage} from "../../components/ChatMessage/ChatMessage";
-import {ChatUser} from "../../components/ChatUser/ChatUser";
+import {requestSendNewMessage, requestStopTypeMessage, requestTypeMessage} from "../../store/chat-reducer";
 import {SendMessageBlock} from "../../components/SendMessageBlok/SendMessageBlock";
 import 'emoji-mart/css/emoji-mart.css';
-import {BaseEmoji, Picker} from 'emoji-mart'
+import {BaseEmoji} from 'emoji-mart'
 import {ChatMessagesBlock} from "../../components/ChatMessagesBlock/ChatMessagesBlock";
+import {ChatHeaderBlock} from "../../components/ChatHeaderBlock/ChatHeaderBlock";
+import {ChatConversationBlock} from "../../components/ChatConversationBlock/ChatConversationBlock";
 
-export const Chat = () => {
+export const ChatPage = () => {
     const dispatch = useDispatch();
 
+    const {users, messages, roomId, typingUsers} = useSelector((state: RootState) => state.chat);
+
     const [newMessage, setMessage] = useState('');
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [showEmoji, setShowEmojiPicker] = useState(false);
     const [isAutoScrollActive, setIsAutoScrollActive] = useState(true);
     const [lastScrollTop, setLastScrollTop] = useState(0);
 
-
-    const {users, messages, roomId, typingUsers} = useSelector((state: RootState) => state.chat);
+    const messagesAnchorRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (isAutoScrollActive) {
             messagesAnchorRef.current?.scrollIntoView({behavior: 'smooth'})
         }
     }, [messages, typingUsers]);
-
-    const messagesAnchorRef = useRef<HTMLDivElement>(null);
 
     //Auto scroll messages
     const scrollMessages = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
@@ -60,7 +53,7 @@ export const Chat = () => {
             dispatch(requestSendNewMessage(newMessage, roomId));
             setMessage('');
             dispatch(requestStopTypeMessage(roomId));
-            toggleEmojiPicker()
+            hideEmojiPicker();
         }
     }
 
@@ -76,47 +69,28 @@ export const Chat = () => {
         setMessage(newMessage + emoji);
     };
 
-    const toggleEmojiPicker = () => {
-        setShowEmojiPicker(!showEmojiPicker)
+    const showEmojiPicker = () => {
+        setShowEmojiPicker(true)
     }
-
-    const messageItem = messages.map(msg => <ChatMessage urlAvatar={msg.user.urlAvatar}
-                                                         userName={msg.user.userName}
-                                                         time={msg.message.time}
-                                                         text={msg.message.text}
-                                                         key={msg.message.id}
-        />
-    );
-    const chatUser = users.map(user => <ChatUser key={user.id} urlAvatar={user.urlAvatar} userName={user.userName}/>);
+    const hideEmojiPicker = () => {
+        setShowEmojiPicker(false)
+    }
 
     return (
         <div className={style.chat}>
             <div className={style.header}>
-                <h1><i className="zmdi zmdi-comments"></i> React Chat</h1>
-
-                {
-                    typingUsers.length !== 0
-                        ? <Typing typingUsers={typingUsers}/>
-                        : null
-                }
-                <button className={style.btn} onClick={() => dispatch(leaveChatRoom())}>
-                    <span><i className="fas fa-sign-out-alt"></i></span>
-                </button>
+                <ChatHeaderBlock typingUsers={typingUsers}/>
             </div>
             <div className={style.wrapper}>
                 <div className={style.conversation__area}>
-                    <h3><i className="zmdi zmdi-accounts"></i> Online: {users.length}</h3>
-                    <div className={style.separator}></div>
-
-                    {chatUser}
-
+                    <ChatConversationBlock users={users}/>
                 </div>
                 <div className={style.chat__area} onScroll={scrollMessages}>
                     <div className={style.chat__area_main}>
                         <ChatMessagesBlock addEmoji={addEmoji}
-                                           messageItem={messageItem}
+                                           messages={messages}
                                            messagesAnchorRef={messagesAnchorRef}
-                                           showEmojiPicker={showEmojiPicker}
+                                           showEmoji={showEmoji}
                         />
                     </div>
                     <div className={style.chat__area_footer}>
@@ -125,7 +99,7 @@ export const Chat = () => {
                             keySend={keySend}
                             newMessage={newMessage}
                             sendNewMessage={sendNewMessage}
-                            toggleEmojiPicker={toggleEmojiPicker}
+                            showEmojiPicker={showEmojiPicker}
                         />
                     </div>
                 </div>

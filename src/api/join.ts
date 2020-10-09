@@ -1,17 +1,21 @@
 import axios from 'axios';
+import {DEV_VERSION} from "../config";
+
+export const baseURL = !DEV_VERSION
+    ? 'http://localhost:7542'
+    : 'https://real-time-chat-back.herokuapp.com';
 
 const instance = axios.create({
-    baseURL: "http://localhost:7542/chat"
-    //baseURL: "https://real-time-chat-back.herokuapp.com/chat"
+    baseURL
 });
 
 export const joinAPI = {
     join(roomId: string, userName: string) {
-        return instance.post(`/rooms`, {roomId, userName})
+        return instance.post(`/chat/rooms`, {roomId, userName})
             .then(res => res.data)
     },
     getRoomData(roomId: string) {
-        return instance.get(`/rooms/${roomId}`)
+        return instance.get(`/chat/rooms/${roomId}`)
             .then(res => res.data)
     }
 }

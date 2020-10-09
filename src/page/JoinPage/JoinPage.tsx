@@ -1,12 +1,12 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
-import style from "./JoinBlock.module.scss"
-import {Button, Input} from "antd";
+import style from "./JoinPage.module.scss"
 import {useDispatch, useSelector} from "react-redux";
 import {chatSubscribe, requestJoin} from "../../store/chat-reducer";
 import {RootState} from "../../store/store";
+import {JoinBlock} from "../../components/JoinBlock/JoinBlock";
 
 
-export const JoinBlock: React.FC = () => {
+export const JoinPage: React.FC = () => {
 
     const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ export const JoinBlock: React.FC = () => {
     }
 
     const loginChat = () => {
-        if (roomId && userName ) {
+        if (roomId.trim() && userName.trim()) {
             dispatch(requestJoin(roomId, userName))
         }
     }
@@ -39,14 +39,13 @@ export const JoinBlock: React.FC = () => {
                 <div className={style.header}>
                     <h1>Welcome to the ReactJS chat</h1>
                 </div>
-                <div className={style.join}>
-                    <Input onChange={onChangeRoomId} value={roomId} placeholder="Enter ID room"/>
-                    <Input onChange={onChangeUserName} value={userName} placeholder="Enter your username"/>
-                    <Button loading={isFetching} onClick={loginChat} type="primary">
-                        <span>Join <i className="zmdi zmdi-sign-in"></i></span>
-                    </Button>
-                </div>
-
+                <JoinBlock onChangeRoomId={onChangeRoomId}
+                           onChangeUserName={onChangeUserName}
+                           loginChat={loginChat}
+                           isFetching={isFetching}
+                           roomId={roomId}
+                           userName={userName}
+                />
             </div>
         </div>
     )
