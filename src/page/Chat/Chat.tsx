@@ -8,15 +8,19 @@ import {
     requestStopTypeMessage,
     requestTypeMessage
 } from "../../store/chat-reducer";
-import {Typing} from "../Typing/Typing";
-import {ChatMessage} from "../ChatMessage/ChatMessage";
-import {ChatUser} from "../ChatUser/ChatUser";
-import {UploadFile} from "../UploadFile/UploadFile";
+import {Typing} from "../../components/Typing/Typing";
+import {ChatMessage} from "../../components/ChatMessage/ChatMessage";
+import {ChatUser} from "../../components/ChatUser/ChatUser";
+import {SendMessageBlock} from "../../components/SendMessageBlok/SendMessageBlock";
+import 'emoji-mart/css/emoji-mart.css';
+import {BaseEmoji, Picker} from 'emoji-mart'
+import {ChatMessagesBlock} from "../../components/ChatMessagesBlock/ChatMessagesBlock";
 
 export const Chat = () => {
     const dispatch = useDispatch();
 
     const [newMessage, setMessage] = useState('');
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [isAutoScrollActive, setIsAutoScrollActive] = useState(true);
     const [lastScrollTop, setLastScrollTop] = useState(0);
 
@@ -46,16 +50,17 @@ export const Chat = () => {
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value);
         dispatch(requestTypeMessage(roomId));
-        if (e.target.value === '') {
+        if (e.target.value.trim() === '') {
             dispatch(requestStopTypeMessage(roomId))
         }
     }
 
     const sendNewMessage = () => {
-        if (newMessage !== '') {
+        if (newMessage.trim() !== '') {
             dispatch(requestSendNewMessage(newMessage, roomId));
             setMessage('');
-            dispatch(requestStopTypeMessage(roomId))
+            dispatch(requestStopTypeMessage(roomId));
+            toggleEmojiPicker()
         }
     }
 
@@ -64,6 +69,15 @@ export const Chat = () => {
             sendNewMessage();
             dispatch(requestStopTypeMessage(roomId))
         }
+    }
+
+    const addEmoji = (e: BaseEmoji) => {
+        let emoji = e.native;
+        setMessage(newMessage + emoji);
+    };
+
+    const toggleEmojiPicker = () => {
+        setShowEmojiPicker(!showEmojiPicker)
     }
 
     const messageItem = messages.map(msg => <ChatMessage urlAvatar={msg.user.urlAvatar}
@@ -78,7 +92,7 @@ export const Chat = () => {
     return (
         <div className={style.chat}>
             <div className={style.header}>
-                <h1><i className="fab fa-react"></i> React Chat</h1>
+                <h1><i className="zmdi zmdi-comments"></i> React Chat</h1>
 
                 {
                     typingUsers.length !== 0
@@ -86,40 +100,32 @@ export const Chat = () => {
                         : null
                 }
                 <button className={style.btn} onClick={() => dispatch(leaveChatRoom())}>
-                    Leave Room
+                    <span><i className="fas fa-sign-out-alt"></i></span>
                 </button>
             </div>
             <div className={style.wrapper}>
                 <div className={style.conversation__area}>
-                    <h3><i className="fas fa-comments"></i> Online: {users.length}</h3>
+                    <h3><i className="zmdi zmdi-accounts"></i> Online: {users.length}</h3>
                     <div className={style.separator}></div>
+
                     {chatUser}
+
                 </div>
                 <div className={style.chat__area} onScroll={scrollMessages}>
                     <div className={style.chat__area_main}>
-                        {messageItem}
-                        <div ref={messagesAnchorRef}></div>
+                        <ChatMessagesBlock addEmoji={addEmoji}
+                                           messageItem={messageItem}
+                                           messagesAnchorRef={messagesAnchorRef}
+                                           showEmojiPicker={showEmojiPicker}
+                        />
                     </div>
                     <div className={style.chat__area_footer}>
-
-                        <UploadFile/>
-
-{/*                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor"
-                             strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-                             className="feather feather-paperclip">
-                            <path
-                                d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
-                        </svg>*/}
-
-
-                        <input
-                            type="text"
-                            placeholder="Enter Message"
-                            value={newMessage}
+                        <SendMessageBlock
                             onChange={onChange}
-                            autoFocus={true}
-                            onKeyPress={keySend}
+                            keySend={keySend}
+                            newMessage={newMessage}
+                            sendNewMessage={sendNewMessage}
+                            toggleEmojiPicker={toggleEmojiPicker}
                         />
                     </div>
                 </div>

@@ -53,6 +53,9 @@
         font-size: 20px;
         padding: 10px 20px;
         margin: 0;
+        i {
+          font-size: 25px;
+        }
       }
     }
     .chat__area {
@@ -64,6 +67,11 @@
       &_main {
         flex-grow: 1;
         padding: 15px 0 55px 0;
+        .emoji {
+          position: absolute;
+          bottom: 80px;
+          right: 20px;
+        }
       }
       &_footer {
         display: flex;
@@ -75,6 +83,13 @@
         position: sticky;
         bottom: 0;
         left: 0;
+        svg {
+          color: #d1d1d2;
+          width: 22px;
+          flex-shrink: 0;
+          cursor: pointer;
+          margin-left: 8px;
+        }
         input {
           border: none;
           color: #d1d1d2;
@@ -93,13 +108,18 @@
   }
 }
 .btn {
-  height: 47px;
-  cursor: pointer;
   padding: 5px 10px;
-  background: #2f3236;
-  color: #d1d1d2;
+  background: transparent;
   border: none;
   font-size: 13px;
   border-radius: 6px;
+  i {
+    cursor: pointer;
+    margin: 0 auto;
+    font-size: 28px;
+    color: #0086ff;
+  }
 }
+
+
 

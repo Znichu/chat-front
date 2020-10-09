@@ -42,7 +42,9 @@ export const JoinBlock: React.FC = () => {
                 <div className={style.join}>
                     <Input onChange={onChangeRoomId} value={roomId} placeholder="Enter ID room"/>
                     <Input onChange={onChangeUserName} value={userName} placeholder="Enter your username"/>
-                    <Button loading={isFetching} onClick={loginChat} type="primary">JOIN</Button>
+                    <Button loading={isFetching} onClick={loginChat} type="primary">
+                        <span>Join <i className="zmdi zmdi-sign-in"></i></span>
+                    </Button>
                 </div>
 
             </div>

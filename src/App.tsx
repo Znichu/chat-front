@@ -1,6 +1,6 @@
 import React from 'react';
-import {JoinBlock} from "./components/JoinBlock/JoinBlock";
-import {Chat} from "./components/Chat/Chat";
+import {JoinBlock} from "./page/Join/JoinBlock";
+import {Chat} from "./page/Chat/Chat";
 import {useSelector} from "react-redux";
 import {RootState} from "./store/store";
 
