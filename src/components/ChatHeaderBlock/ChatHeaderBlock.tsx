@@ -1,6 +1,6 @@
 import React from "react";
 import {Typing} from "../Typing/Typing";
-import style from "../../page/Chat/Chat.module.scss";
+import style from "./ChatHeaderBlock.module.scss";
 import {leaveChatRoom} from "../../store/chat-reducer";
 import {useDispatch} from "react-redux";
 import {ChatUserType} from "../../type/types";
@@ -22,7 +22,7 @@ export const ChatHeaderBlock: React.FC<PropsType> = ({typingUsers}) => {
                     ? <Typing typingUsers={typingUsers}/>
                     : null
             }
-            <button className={style.btn} onClick={() => dispatch(leaveChatRoom())}>
+            <button className={style.header__btn} onClick={() => dispatch(leaveChatRoom())}>
                 <span><i className="fas fa-sign-out-alt"></i></span>
             </button>
         </>
