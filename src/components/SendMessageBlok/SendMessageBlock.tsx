@@ -8,6 +8,7 @@ type PropsType = {
     showEmojiPicker: () => void
     keySend: (event: React.KeyboardEvent<HTMLInputElement>) => void
     sendNewMessage: () => void
+    addImgMessage: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
 export const SendMessageBlock: React.FC<PropsType> = (
@@ -16,19 +17,9 @@ export const SendMessageBlock: React.FC<PropsType> = (
         onChange,
         showEmojiPicker,
         keySend,
-        sendNewMessage
+        sendNewMessage,
+        addImgMessage
     }) => {
-
-    const encodeImageFileAsURL = (e: ChangeEvent<HTMLInputElement>) => {
-        // @ts-ignore
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            debugger
-            console.log('RESULT', reader.result)
-        }
-        reader.readAsDataURL(file);
-    }
 
     return (
         <>
@@ -36,7 +27,7 @@ export const SendMessageBlock: React.FC<PropsType> = (
                 <label>
                     <input
                         type="file"
-                        onChange={encodeImageFileAsURL}
+                        onChange={addImgMessage}
                     />
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor"

@@ -18,6 +18,7 @@ export const ChatMessagesBlock: React.FC<PropsType> = ({messages, showEmoji, add
                                                          userName={msg.user.userName}
                                                          time={msg.message.time}
                                                          text={msg.message.text}
+                                                         img={msg.message.img}
                                                          key={msg.message.id}
     />);
 

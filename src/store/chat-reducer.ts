@@ -2,7 +2,7 @@ import {ThunkAction} from "redux-thunk";
 import {InferActionTypes, RootState} from "./store";
 import {joinAPI} from "../api/join";
 import {socketAPI} from "../api/socket";
-import {ChatDataType, ChatUserType, MessageObjectType} from "../type/types";
+import {ChatDataType, ChatUserType, MessageObjectType, MessageType} from "../type/types";
 
 let initialState = {
     roomId: '',
@@ -114,7 +114,7 @@ export const chatSubscribe = (): ThunkType => async (dispatch) => {
         })
 }
 
-export const requestSendNewMessage = (message: string, roomId: string): ThunkType => async (dispatch) => {
+export const requestSendNewMessage = (message: MessageType, roomId: string): ThunkType => async (dispatch) => {
     socketAPI.sendMessage(message, roomId)
 }
 

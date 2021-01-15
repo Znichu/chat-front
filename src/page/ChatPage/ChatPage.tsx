@@ -10,12 +10,14 @@ import {ChatMessagesBlock} from "../../components/ChatMessagesBlock/ChatMessages
 import {ChatHeaderBlock} from "../../components/ChatHeaderBlock/ChatHeaderBlock";
 import {ChatConversationBlock} from "../../components/ChatConversationBlock/ChatConversationBlock";
 
+
 export const ChatPage = () => {
     const dispatch = useDispatch();
 
     const {users, messages, roomId, typingUsers} = useSelector((state: RootState) => state.chat);
 
     const [newMessage, setMessage] = useState('');
+    const [newImg, setImg] = useState<string | ArrayBuffer | null>(null);
     const [showEmoji, setShowEmojiPicker] = useState(false);
     const [isAutoScrollActive, setIsAutoScrollActive] = useState(true);
     const [lastScrollTop, setLastScrollTop] = useState(0);
@@ -49,18 +51,31 @@ export const ChatPage = () => {
     }
 
     const sendNewMessage = () => {
+        let message = {text: newMessage, img: newImg}
         if (newMessage.trim() !== '') {
-            dispatch(requestSendNewMessage(newMessage, roomId));
+            dispatch(requestSendNewMessage(message, roomId));
             setMessage('');
+            setImg(null);
             dispatch(requestStopTypeMessage(roomId));
-            hideEmojiPicker();
         }
+        if (showEmoji) hideEmojiPicker();
     }
 
     const keySend = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             sendNewMessage();
             dispatch(requestStopTypeMessage(roomId))
+        }
+    }
+
+    const addImgMessage = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImg(reader.result)
+            }
+            reader.readAsDataURL(file);
         }
     }
 
@@ -95,6 +110,7 @@ export const ChatPage = () => {
                     </div>
                     <div className={style.chat__area_footer}>
                         <SendMessageBlock
+                            addImgMessage={addImgMessage}
                             onChange={onChange}
                             keySend={keySend}
                             newMessage={newMessage}

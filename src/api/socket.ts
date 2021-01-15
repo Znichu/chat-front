@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import {ChatUserType, MessageObjectType} from "../type/types";
+import {ChatUserType, MessageObjectType, MessageType} from "../type/types";
 import {baseURL} from "./join";
 
 export const socketAPI = {
@@ -22,7 +22,7 @@ export const socketAPI = {
     roomJoin(roomId: string, userName: string) {
         this.socket?.emit('ROOM:JOIN', {roomId, userName});
     },
-    sendMessage(message: string, roomId: string) {
+    sendMessage(message: MessageType, roomId: string) {
         this.socket?.emit('ROOM:NEW_MESSAGE', {message, roomId}, (error: string | null) => {
             if (error) console.log(error);
         })
